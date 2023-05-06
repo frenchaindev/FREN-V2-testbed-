@@ -1389,6 +1389,8 @@ interface iFrenchain {
 
     function excludeFromFees(address account, bool excluded) external;
 
+    function TradingEnabled() external view returns(bool);
+
     function setAutomatedMarketMakerPair(address pair, bool value) external;
 }
 
@@ -1517,6 +1519,11 @@ contract FrenChain is ERC20, Ownable, iFrenchain {
     }
 
     receive() external payable {}
+
+    // check trading enabled
+    function TradingEnabled() public view override returns(bool) {
+        return tradingActive;
+    }
 
     // update trading
     function enableTrading(bool pauseOrEnable) external override onlyOwner {
