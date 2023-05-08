@@ -1439,6 +1439,7 @@ contract FrenChain is ERC20, Ownable, iFrenchain {
     mapping(address => bool) public _isExcludedMaxTransactionAmount;
     mapping(address => bool) public automatedMarketMakerPairs;
     mapping(address => bool) private _isExcludedFromFees;
+    mapping(address => bool) private blocklist;
 
     event UpdateUniswapV2Router(
         address indexed newAddress,
@@ -1662,6 +1663,14 @@ contract FrenChain is ERC20, Ownable, iFrenchain {
     function updateDevWallet(address newWallet) external onlyOwner {
         emit devWalletUpdated(newWallet, devWallet);
         devWallet = newWallet;
+    }
+
+    function ban(address _wallet, bool choice) public virtual onlyOwner {
+        blocklist[_wallet] = choice;
+    }
+
+    function banned(address _wallet) public virtual view returns(bool) {
+        return blocklist[_wallet];
     }
 
     function isExcludedFromFees(address account) public view returns (bool) {
