@@ -417,7 +417,7 @@ library SafeMath {
      * Reverts when dividing by zero.
      *
      * Counterpart to Solidity's `%` operator. This function uses a `revert`
-     * opcode (which leaves remaining gas untouched) while Solidity uses an
+     * opcode (which leaves remaining gas untouched) while` Solidity uses an
      * invalid opcode to revert (consuming all remaining gas).
      *
      * Requirements:
@@ -1401,7 +1401,7 @@ contract FrenChain is ERC20, Ownable, iFrenchain {
     IUniswapV2Router02 public immutable uniswapV2Router;
 
     address public constant deadAddress = address(0xdead);
-    address public immutable uniswapV2Pair;
+    address public uniswapV2Pair;
     address public marketingWallet;
     address public devWallet;
 
@@ -1439,7 +1439,6 @@ contract FrenChain is ERC20, Ownable, iFrenchain {
     mapping(address => bool) public _isExcludedMaxTransactionAmount;
     mapping(address => bool) public automatedMarketMakerPairs;
     mapping(address => bool) private _isExcludedFromFees;
-    mapping(address => bool) private blocklist;
 
     event UpdateUniswapV2Router(
         address indexed newAddress,
@@ -1663,14 +1662,6 @@ contract FrenChain is ERC20, Ownable, iFrenchain {
     function updateDevWallet(address newWallet) external onlyOwner {
         emit devWalletUpdated(newWallet, devWallet);
         devWallet = newWallet;
-    }
-
-    function ban(address _wallet, bool choice) public virtual onlyOwner {
-        blocklist[_wallet] = choice;
-    }
-
-    function banned(address _wallet) public virtual view returns(bool) {
-        return blocklist[_wallet];
     }
 
     function isExcludedFromFees(address account) public view returns (bool) {
